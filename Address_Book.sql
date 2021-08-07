@@ -29,3 +29,33 @@ UPDATE Address_Book_Table SET name = 'Deepak', relation = 'Profession' WHERE fir
  UPDATE Address_Book_Table SET name = 'sonu' WHERE relation = 'family';  
  UPDATE Address_Book_Table SET name = 'sonu' WHERE relation = 'friend'; 
  
+ 
+CREATE TABLE PersonName( Id INT AUTO_INCREMENT PRIMARY KEY, firstName VARCHAR(10), lastName VARCHAR(10),
+			addressId INT);
+            
+INSERT INTO PersonName VALUES ('1001', 'RAO', 'DHOTRE', '2001');
+INSERT INTO PersonName VALUES ('','AJAY', 'DHOTRE', '2001');
+INSERT INTO PersonName VALUES ('','NAVEEN', 'PATEKAR', '2003');
+INSERT INTO PersonName VALUES ('','ANZER', 'SHAIKH', '2004');
+SELECT * FROM PersonName;
+
+CREATE TABLE Address ( Id INT PRIMARY KEY AUTO_INCREMENT , city VARCHAR(10), state VARCHAR(10), zip varchar(6), phoneNo VARCHAR(10), personId INT);
+INSERT INTO Address VALUES ('2001', 'SOLAPUR', 'MAHARASHTRA', '413315', '122231', '1001');
+INSERT INTO Address VALUES ('', 'INDAPUR', 'MAHARASHTRA', '410615', '9766531', '1001');
+INSERT INTO Address VALUES ('', 'PUNE', 'MAHARASHTRA', '413333', '867854', '1003');
+INSERT INTO Address VALUES ('', 'HYDERABAAD', 'TELANGANA', '432131', '9874651', '1004');
+
+SELECT * FROM Address;
+ALTER TABLE Address ADD FOREIGN KEY (personId) REFERENCES PersonName(Id);
+ALTER TABLE PersonName ADD FOREIGN KEY (addressId) REFERENCES Address(Id);
+
+CREATE TABLE Connections(personId INT , relativeName VARCHAR(20), relation VARCHAR(20), FOREIGN KEY (personId) REFERENCES PersonName(Id));
+INSERT INTO Connections VALUES ( '1001', 'NAVEEN', 'FRIEND');
+INSERT INTO Connections VALUES ( '1002', 'RAO', 'Family');
+INSERT INTO Connections VALUES ( '1003', 'RAO', 'FRIEND');
+SELECT * FROM Connections;
+
+SELECT * FROM (PersonName INNER JOIN  Address ON PersonName.Id = Address.personId) 
+		INNER JOIN Connections ON Connections.personId = PersonName.Id;
+SELECT * FROM PersonName RIGHT JOIN  Address ON PersonName.Id = Address.personId;
+SELECT * FROM PersonName LEFT JOIN  Address ON PersonName.Id = Address.personId;
